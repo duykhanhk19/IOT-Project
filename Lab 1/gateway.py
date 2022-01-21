@@ -46,8 +46,10 @@ client.on_message = recv_message
 
 temp = 30
 humi = 50
+latitude = 10.8231
+longitude = 106.6297
 while True:
-    collect_data = {'temperature': temp, 'humidity': humi}
+    collect_data = {'temperature': temp, 'humidity': humi, 'latitude': latitude, 'longitude': longitude}
     temp += random.randrange(-5, 6) 
     humi += random.randrange(-5, 6)
     client.publish('v1/devices/me/telemetry', json.dumps(collect_data), 1)
