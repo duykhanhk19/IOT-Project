@@ -4,6 +4,7 @@ import paho.mqtt.client as mqttclient
 import time
 import json
 import random
+import geocoder
 
 BROKER_ADDRESS = "demo.thingsboard.io"
 PORT = 1883
@@ -46,9 +47,13 @@ client.on_message = recv_message
 
 temp = 30
 humi = 50
-latitude = 10.8231
-longitude = 106.6297
+latitude = 0
+longitude = 0
 while True:
+    g = geocoder.ip('me')
+    if len(g.latlng) > 0:
+        latitude = g.latlng[0]
+        longitude = g.latlng[1]
     collect_data = {'temperature': temp, 'humidity': humi, 'latitude': latitude, 'longitude': longitude}
     temp += random.randrange(-5, 6) 
     humi += random.randrange(-5, 6)
