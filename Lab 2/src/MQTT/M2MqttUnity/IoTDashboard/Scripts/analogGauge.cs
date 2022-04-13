@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace gaugeChart
 {
-    public class gauge : MonoBehaviour
+    public class analogGauge : MonoBehaviour
     {
 
         private Transform labelTemplate;

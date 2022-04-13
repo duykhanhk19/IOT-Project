@@ -8,34 +8,37 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 using M2MqttUnity;
 using DG.Tweening;
 
-namespace M2MqttUnity.Examples
+namespace M2MqttUnity.IoTDashboard
 {
-    public class M2MqttUnityTest : M2MqttUnityClient 
+    public class M2MqttUnityIoTDashboard : M2MqttUnityClient 
     {
+        // Declare attributes
+        // Screens
         public RectTransform login, error, mainScreen;
-
+        // Inputs in screen 1
         public InputField brokerURIInputField;
         public InputField usernameInputField;
         public InputField passwordInputField;
         public Button connectButton;
-
+        // Hide/show password images
         public Image hidePassImage;
         public Image showPassImage;
-
+        // Toggle buttons
         public RectTransform buttonLED;
         public RectTransform buttonPUMP;
         public Image btled;
         public Image btpump;
-
+        // Digital gauge
         public Scrollbar hunidityBar;
         public Text humidityBarText;
-
+        // Error
         public Text typeMessage;
         public Text errorMessage;
-
+        // Temperature and humidity text display
         public Text temperatureDisplay;
         public Text humidityDisplay;
-
+        
+        // Declare variable
         public bool isLogOut;
         public bool LEDON = false;
         public bool PUMPON = false;
@@ -45,15 +48,19 @@ namespace M2MqttUnity.Examples
 
         public void ConnectToServer()
         {
+            // Save new infomations
             PlayerPrefs.SetString("brokerURI", brokerURIInputField.text);
             PlayerPrefs.SetString("username", usernameInputField.text);
             PlayerPrefs.SetString("password", passwordInputField.text);
+            // Update new information to connect to server
             this.brokerAddress = brokerURIInputField.text;
             this.mqttUserName = usernameInputField.text;
             this.mqttPassword = passwordInputField.text;
+            // Call connect function
             this.Connect();
         }
 
+        // If connecting successfully, then move to screen 2
         protected override void OnConnected()
         {
             base.OnConnected();
@@ -62,6 +69,7 @@ namespace M2MqttUnity.Examples
             mainScreen.DOAnchorPos(new Vector2(0, -74), 0.25f);
         }
 
+        // Connect to server failure, annouce error
         protected override void OnConnectionFailed(string errorMessage)
         {
             base.OnConnectionFailed(errorMessage);
@@ -131,22 +139,23 @@ namespace M2MqttUnity.Examples
 
         protected override void Start()
         {
+            // Move screens
             login.DOAnchorPos(new Vector2(0, -74), 0.1f);
             error.DOAnchorPos(new Vector2(0, 1100), 0.1f);
             mainScreen.DOAnchorPos(new Vector2(770, -74), 0.1f);
-
+            // Initial type of password display
             isLogOut = false;
             passwordInputField.contentType = InputField.ContentType.Password;
             hidePassImage.enabled = true;
             showPassImage.enabled = false;
-
+            // Load the last information to inputfield
             brokerURIInputField.text = PlayerPrefs.GetString("brokerURI");
             usernameInputField.text = PlayerPrefs.GetString("username");
             passwordInputField.text = PlayerPrefs.GetString("password");
-
+            // Update temperature and humidity for display
             UpdateTemperature();
             UpdateHumidity();
-
+            // Initial for toggle button
             isConnected = false;
             LEDON = true; PUMPON = true;
             ButtonLEDClick();
@@ -202,7 +211,7 @@ namespace M2MqttUnity.Examples
 
         private void ProcessMessage(string msg)
         {
-            //AddUiMessage("Received: " + msg);
+            Debug.Log("Received: " + msg);
         }
 
         protected override void Update()
@@ -325,7 +334,7 @@ namespace M2MqttUnity.Examples
         }
 
 
-        // Gauge chart
+        // Needle of analog gauge
         public Transform needleTransform;
 
         private const float MIN_NEEDLE = 210;
